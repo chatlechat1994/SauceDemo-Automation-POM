@@ -1,38 +1,40 @@
+import pytest
 from selenium import webdriver
 from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
-import time
 
-def test_buy_backpack():
-    # 1. Setup: Start the Chrome browser
+def test_backpack_purchase_flow():
+    """
+    Test Case: Verify a user can login and add a backpack to the cart.
+    """
+    # Browser Setup
     driver = webdriver.Chrome()
     driver.maximize_window()
+    driver.implicitly_wait(10) # Added a standard implicit wait for stability
     driver.get("https://www.saucedemo.com/")
 
-    # 2. Initialize Page Objects (Our "Maps")
-    # This connects the 'Brain' to the 'Finger'
-    login = LoginPage(driver)
-    inventory = InventoryPage(driver)
+    # Page Initializations
+    login_page = LoginPage(driver)
+    inventory_page = InventoryPage(driver)
 
-    # 3. Execution: Perform the steps
-    # Notice how easy this is to read!
-    login.enter_username("standard_user")
-    login.enter_password("secret_sauce")
-    login.click_login()
+    # 1. Login Flow
+    login_page.enter_username("standard_user")
+    login_page.enter_password("secret_sauce")
+    login_page.click_login()
 
-    # Add the item to the cart
-    inventory.add_backpack_to_cart()
-    inventory.go_to_cart()
+    # 2. Inventory Actions
+    inventory_page.add_backpack_to_cart()
+    inventory_page.go_to_cart()
 
-    # 4. Verification: Did we reach the cart?
-    time.sleep(2)  # Small pause just so we can see it happen
-    assert "cart.html" in driver.current_url
+    # 3. Verification
+    # Check if the URL updated to the cart page
+    expected_url = "https://www.saucedemo.com/cart.html"
+    assert driver.current_url == expected_url, f"Expected {expected_url} but got {driver.current_url}"
     
-    print("\n✅ Test Passed: Backpack successfully added to cart!")
+    print("Test Status: Success - Item added to cart.")
 
-    # 5. Cleanup: Close the browser
+    # Teardown
     driver.quit()
 
-# The "Magic Password" for Python to run this specific file
 if __name__ == "__main__":
-    test_buy_backpack()
+    test_backpack_purchase_flow()
