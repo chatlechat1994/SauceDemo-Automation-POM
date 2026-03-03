@@ -1,3 +1,22 @@
+# Python bytecode (compiled files)
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Pytest results and cache
 .pytest_cache/
+.pytest/
+test-results/
+
+# Virtual Environments (The heavy library folders)
+venv/
+env/
+.env
+
+# IDE / Editor folders
+.vscode/
+.idea/
+
+# Reports (If you generate them later)
+*.html
+*.log
